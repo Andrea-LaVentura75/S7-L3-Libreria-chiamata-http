@@ -31,10 +31,10 @@ const creazioneTabelle = function () {
     colCard.classList.add("col", "col-12", "col-md-6", "col-lg-3");
 
     colCard.innerHTML = `
-    <div class="card mt-3">
-      <img height ="500"
+    <div class="card mt-3 card-class">
+      <img 
         src=" ${book.img}"
-        class="card-img-top  "
+        class="card-img-top w-100 card-img  "
         alt="doggo picture"
       />
       <div class="card-body">
@@ -73,7 +73,6 @@ const buttonScarta = function () {
   btnAggiungi.forEach((btn) => {
     btn.addEventListener("click", function () {
       let colCard = btn.closest(".col");
-      let row2 = document.getElementById("row2");
       let bookTitle = colCard.querySelector(".card-title").innerText;
       let bookPrice = colCard.querySelector("#price").innerText;
 
@@ -86,19 +85,43 @@ const buttonScarta = function () {
 
       let book = new Bookinfo(bookTitle, bookPrice);
 
-      let savedBooks = JSON.parse(localStorage.getItem("bookShoop")) || [];
-
-      savedBooks.push(book);
-
-      localStorage.setItem("bookShoop", JSON.stringify(savedBooks));
-      console.log(savedBooks);
-
-      savedBooks.forEach((book) => {
-        let colCard = document.createElement("div");
-        colCard.classList.add("col", "col-12");
-        colCard.innerHTML = `<h4 ">${book.title}-${book.price}$</h4>`;
-        row2.appendChild(colCard);
-      });
+      listaShop(book);
     });
   });
 };
+
+const listaShop = function (newBook) {
+  let savedBooks = JSON.parse(localStorage.getItem("bookShoop")) || [];
+
+  if (newBook) {
+    savedBooks.push(newBook);
+  }
+
+  localStorage.setItem("bookShoop", JSON.stringify(savedBooks));
+
+  let ul = document.getElementById("ul-shop");
+
+  ul.innerHTML = "";
+
+  savedBooks.forEach((book) => {
+    let colCard = document.createElement("li");
+    colCard.classList.add("dropdown-item");
+    colCard.innerHTML = `<h5 class="cursor-pointer h5Shopp ">${book.title}-${book.price}$ <i  class="bi bi-trash text-danger cestino" ></i></h5>`;
+    ul.appendChild(colCard);
+  });
+
+  let cestini = document.querySelectorAll(".cestino");
+
+  cestini.forEach((cestino) => {
+    cestino.addEventListener("click", function () {
+      let index = this.getAttribute("data-index");
+
+      savedBooks.splice(index, 1);
+
+      localStorage.setItem("bookShoop", JSON.stringify(savedBooks));
+
+      listaShop();
+    });
+  });
+};
+listaShop();
