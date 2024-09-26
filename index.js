@@ -103,18 +103,18 @@ const listaShop = function (newBook) {
 
   ul.innerHTML = "";
 
-  savedBooks.forEach((book) => {
+  savedBooks.forEach((book, index) => {
     let colCard = document.createElement("li");
     colCard.classList.add("dropdown-item");
-    colCard.innerHTML = `<h5 class="cursor-pointer h5Shopp ">${book.title}-${book.price}$ <i  class="bi bi-trash text-danger cestino" ></i></h5>`;
+    colCard.innerHTML = `<h5 class="cursor-pointer h5Shopp ">${book.title}-${book.price}$ <i  class="bi bi-trash text-danger cestino" data-index="${index}"></i></h5>`;
     ul.appendChild(colCard);
   });
 
   let cestini = document.querySelectorAll(".cestino");
 
   cestini.forEach((cestino) => {
-    cestino.addEventListener("click", function () {
-      let index = this.getAttribute("data-index");
+    cestino.addEventListener("click", function (event) {
+      let index = event.target.getAttribute("data-index");
 
       savedBooks.splice(index, 1);
 
